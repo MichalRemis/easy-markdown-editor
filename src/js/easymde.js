@@ -412,11 +412,39 @@ function toggleFullScreen(editor) {
 }
 
 
+//toto some sem pridal, casto sa stavalo u poliakov ze dali bod ale na konci/zaciatku bola jedna medzera a zle to zvyraznilo a som musel opravovat
+//tato funkcia upravy oznacenie tak aby neboli na konci/zaciatku vyberu medzery.. prinajhorsom to mozem neskor vylepsi este aj aby to nebolo v strede slova to sa nejako bude dat (napr. prva polovica slova sa vrati dopredu druha dozadu)
+function normalizeSelection(editor) {
+    const cm = editor.codemirror
+
+    const startPoint = cm.getCursor('start');
+    const endPoint = cm.getCursor('end');
+    const text = cm.getLine(startPoint.line);    
+ 
+    let newStart = startPoint.ch
+    let newEnd = endPoint.ch - 1
+
+    while ((text[newStart] == ' ' || text[newStart]== '\n') && newStart <= newEnd)  {
+      newStart++
+    }
+
+    while ((text[newEnd] == ' ' || text[newEnd]== '\n') && newStart <= newEnd)  {
+      newEnd--
+    }
+
+    startPoint.ch = newStart;
+    endPoint.ch = newEnd+1;    
+    cm.setSelection(startPoint, endPoint);
+}
+
+
+
 /**
  * Action for toggling bold.
  * @param {EasyMDE} editor
  */
 function toggleBold(editor) {
+    normalizeSelection(editor)
     _toggleBlock(editor, 'bold', editor.options.blockStyles.bold);
 }
 
@@ -426,6 +454,7 @@ function toggleBold(editor) {
  * @param {EasyMDE} editor
  */
 function toggleItalic(editor) {
+    normalizeSelection(editor)
     _toggleBlock(editor, 'italic', editor.options.blockStyles.italic);
 }
 
