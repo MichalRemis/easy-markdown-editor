@@ -45,7 +45,6 @@
     "repository": "github:MichalRemis/easy-markdown-editor",
     "scripts": {
         "prepare": "gulp",
-        "postinstall": "npm install && gulp",
         "test": "npm run lint && npm run test:types && npm run e2e",
         "lint": "gulp lint",
         "cypress:lint": "eslint cypress",
